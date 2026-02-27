@@ -163,11 +163,11 @@
         const bird = {
             x: 50,
             y: 150,
-            width: 40,
-            height: 40,
+            width: 100,
+            height: 100,
             velocity: 0,
             gravity: 0.42,
-                jumpStrength: -7,
+                jumpStrength: -8,
             draw() {
                 if (birdImg.complete && birdImg.naturalWidth) {
                     ctx.drawImage(birdImg, this.x, this.y, this.width, this.height);
