@@ -193,8 +193,9 @@
         // Pipes
         const pipes = [];
         const pipeWidth = 60;
-        const pipeGap = 170; // increased gap for normal difficulty
-        const pipeSpeed = 2.2; // slightly slower pipes
+        // gap scales with the face size so larger faces can pass comfortably
+        let pipeGap = Math.max(220, Math.floor(bird.height * 2.0)); // medium difficulty baseline
+        const pipeSpeed = 3.0; // a bit faster for medium-hard difficulty
 
         function drawPipes(){
             // draw pipes with professional slate colors and subtle edge
@@ -216,7 +217,7 @@
         }
 
         function updatePipes(){
-            if (frames % 120 === 0) { // spawn less frequently for normal difficulty
+            if (frames % 100 === 0) { // spawn more frequently for medium-hard
                 const minHeight = 50;
                 const maxHeight = Math.max(80, canvasHeight - pipeGap - minHeight);
                 const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
@@ -226,8 +227,8 @@
                 const p = pipes[i];
                 p.x -= pipeSpeed;
 
-                // collision (with small padding to make game feel fairer)
-                const pad = 4;
+                // collision (with slightly larger padding to account for big face)
+                const pad = 6;
                 if (bird.x + pad < p.x + pipeWidth && bird.x + bird.width - pad > p.x && (bird.y + pad < p.topHeight || bird.y + bird.height - pad > p.topHeight + pipeGap)) {
                     gameOver();
                 }
