@@ -110,7 +110,7 @@
         <div id="ui-screen" class="ui-layer visible">
             <div class="overlay-card">
                 <div class="title" id="ui-title">Flappy Tittu</div>
-                <div class="subtitle" id="ui-subtitle">Tap or press Space or tap to jump</div>
+                <div class="subtitle" id="ui-subtitle">Easy mode — Tap or press Space to jump</div>
                 <div class="controls">
                     <button id="start-btn" class="btn btn-play">PLAY</button>
                     <button id="mute-btn" class="btn btn-ghost">MUTE</button>
@@ -163,11 +163,11 @@
         const bird = {
             x: 50,
             y: 150,
-            width: 65,
-            height: 65,
+            width: 56,
+            height: 56,
             velocity: 0,
-            gravity: 0.42,
-                jumpStrength: -8,
+            gravity: 0.28,
+                jumpStrength: -9,
             draw() {
                 if (birdImg.complete && birdImg.naturalWidth) {
                     ctx.drawImage(birdImg, this.x, this.y, this.width, this.height);
@@ -192,10 +192,11 @@
 
         // Pipes
         const pipes = [];
-        const pipeWidth = 60;
+        const pipeWidth = 50;
         // gap scales with the face size so larger faces can pass comfortably
-        let pipeGap = Math.max(220, Math.floor(bird.height * 2.0)); // medium difficulty baseline
-        const pipeSpeed = 3.0; // a bit faster for medium-hard difficulty
+        // raised baseline gap and slightly larger multiplier for easy mode
+        let pipeGap = Math.max(300, Math.floor(bird.height * 2.2)); // easier baseline
+        const pipeSpeed = 2.0; // slower pipes for easier gameplay
 
         function drawPipes(){
             // draw pipes with professional slate colors and subtle edge
@@ -217,7 +218,7 @@
         }
 
         function updatePipes(){
-            if (frames % 100 === 0) { // spawn more frequently for medium-hard
+            if (frames % 140 === 0) { // spawn less frequently for easy mode
                 const minHeight = 50;
                 const maxHeight = Math.max(80, canvasHeight - pipeGap - minHeight);
                 const topHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
@@ -227,8 +228,8 @@
                 const p = pipes[i];
                 p.x -= pipeSpeed;
 
-                // collision (with slightly larger padding to account for big face)
-                const pad = 6;
+                // collision padding reduced slightly for easier play
+                const pad = 4;
                 if (bird.x + pad < p.x + pipeWidth && bird.x + bird.width - pad > p.x && (bird.y + pad < p.topHeight || bird.y + bird.height - pad > p.topHeight + pipeGap)) {
                     gameOver();
                 }
